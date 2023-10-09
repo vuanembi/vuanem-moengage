@@ -1,7 +1,7 @@
 import { Transform } from 'node:stream';
 
 import { getUserAttributesStream } from './user-attribute.service';
-import { UserAttributesSchema } from '../moengage/moengage.dto';
+import { UserAttributesSchema } from '../pipeline/pipeline.dto';
 
 it('getUserAttributes', (done) => {
     const transform = new Transform({
