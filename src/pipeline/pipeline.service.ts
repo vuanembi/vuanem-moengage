@@ -9,8 +9,6 @@ import { getClient, bulkImport } from '../moengage/moengage.service';
 import { UserAttributesSchema } from './pipeline.dto';
 
 export const syncUserAttributes = async () => {
-    logger.info({ fn: 'syncUserAttributes' });
-
     let count = 0;
 
     const extractStream = getUserAttributesStream();
@@ -29,7 +27,7 @@ export const syncUserAttributes = async () => {
         bulkImport(client, elements)
             .then(() => {
                 count = count + elements.length;
-                logger.debug({ fn: 'syncUserAttributes', count });
+                logger.info({ fn: 'syncUserAttributes', count });
                 callback();
             })
             .catch((error) => callback(error));
