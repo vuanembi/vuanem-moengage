@@ -1,3 +1,5 @@
+version: '3'
+
 services:
     app:
         image: us-docker.pkg.dev/voltaic-country-280607/gcr.io/vuanem-moengage:${GH_REF:-master}
@@ -7,4 +9,3 @@ services:
             - ./${GOOGLE_APPLICATION_CREDENTIALS}:/tmp/{GOOGLE_APPLICATION_CREDENTIALS}
         environment:
             GOOGLE_APPLICATION_CREDENTIALS: /tmp/{GOOGLE_APPLICATION_CREDENTIALS}
-        cpu_count: 4
