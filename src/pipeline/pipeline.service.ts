@@ -17,7 +17,7 @@ export const syncUserAttributes = async () => {
         objectMode: true,
         transform: (row, _, callback) => {
             const { value, error } = UserAttributesSchema.validate(row);
-            error ? callback(error) : callback(null, { customer_id: value.phone, attributes: value });
+            error ? callback(error) : callback(null, { type: 'customer', customer_id: value.phone, attributes: value });
         },
     });
 
