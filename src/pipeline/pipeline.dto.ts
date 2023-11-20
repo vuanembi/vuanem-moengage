@@ -21,6 +21,14 @@ const dateSchema = Joi.custom((value) => {
     return null;
 });
 
+const timestampSchema = Joi.custom((value) => {
+    if (value instanceof BigQueryTimestamp || value instanceof BigQueryDate || value instanceof BigQueryDate) {
+        return dayjs(value.value).toISOString();
+    }
+
+    return null;
+});
+
 export const UserAttributesSchema = Joi.object({
     u_mb: Joi.string(),
     u_n: Joi.string(),
@@ -44,4 +52,11 @@ export const UserAttributesSchema = Joi.object({
     last_engagement_date: dateSchema,
     last_engagement_place: Joi.string(),
     last_purchase_channel: Joi.string(),
+});
+
+export const DeliverySuccessEventSchema = Joi.object({
+    u_mb: Joi.string(),
+    user_name: Joi.string(),
+    order_type: Joi.string(),
+    date_delivery_success: timestampSchema,
 });
