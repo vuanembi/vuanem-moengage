@@ -1,6 +1,6 @@
 import { logger } from './logging.service';
 
-import { syncUserAttributes } from './pipeline/pipeline.service';
+import { sync } from './pipeline/pipeline.service';
 
 process.on('uncaughtException', () => {
     logger.error({ action: 'uncaught-exception' });
@@ -14,7 +14,7 @@ process.on('SIGINT', () => {
 
 (async () => {
     logger.info({ fn: 'index', details: 'start' });
-    await syncUserAttributes()
+    await sync()
         .then(() => logger.info({ fn: 'index', details: 'success' }))
         .catch((error) => {
             console.log(error);
