@@ -6,7 +6,7 @@ import parallelTransform from 'parallel-transform';
 import { logger } from '../logging.service';
 import { getUserAttributesStream } from '../user-attribute/user-attribute.service';
 import { getClient, bulkImport } from '../moengage/moengage.service';
-import { UserAttributesSchema } from './pipeline.dto';
+import { UserAttributesSchema } from '../user-attribute/user-attribute.dto';
 
 export const syncUserAttributes = async () => {
     let count = 0;

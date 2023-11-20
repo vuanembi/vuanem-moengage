@@ -1,7 +1,7 @@
 import { Transform } from 'node:stream';
 
 import { getDeliverySuccessStream } from './delivery-success.service';
-import { DeliverySuccessEventSchema } from '../pipeline/pipeline.dto';
+import { DeliverySuccessEventSchema } from './delivery-success.dto';
 
 it('getDeliverySuccess', (done) => {
     const transform = new Transform({
