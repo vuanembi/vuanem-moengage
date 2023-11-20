@@ -7,15 +7,13 @@ import mergeStream from 'merge-stream';
 import { logger } from '../logging.service';
 import { getUserAttributesStream } from '../user-attribute/user-attribute.service';
 import { getDeliverySuccessStream } from '../delivery-success/delivery-success.service';
-import { getClient, bulkImport } from '../moengage/moengage.service';
+import { bulkImport } from '../moengage/moengage.service';
 
 export const sync = async () => {
     let count = 0;
 
-    const client = await getClient();
-
     const importStream = parallelTransform(50, { ordered: false }, (elements, callback) => {
-        bulkImport(client, elements)
+        bulkImport(elements)
             .then(() => {
                 count = count + elements.length;
                 logger.info({ fn: 'sync', count });
@@ -24,7 +22,7 @@ export const sync = async () => {
             .catch((error) => callback(error));
     });
 
-    return pipeline(
+    return await pipeline(
         mergeStream(getUserAttributesStream(), getDeliverySuccessStream()),
         new BatchStream({ size: 200 }),
         importStream,
