@@ -1,0 +1,26 @@
+import { Joi, date, number } from '../joi';
+
+export const UserAttributesSchema = Joi.object({
+    u_mb: Joi.string(),
+    u_n: Joi.string(),
+    u_em: Joi.string(),
+    is_customer: Joi.boolean(),
+    loyalty_point: number,
+    loyalty_group: Joi.string(),
+    expire_date_group: date,
+    dob: date,
+    redeem_amount: number,
+    last_trandate: date,
+    t_rev: number,
+    frequency: number,
+    last_rating_point: number,
+    last_rating_date: date,
+    moe_ip_city: Joi.string(),
+    last_location_code: Joi.string(),
+    first_medium: Joi.string(),
+    moe_cr_from: Joi.string(),
+    first_campaign_name: Joi.string(),
+    last_engagement_date: date,
+    last_engagement_place: Joi.string(),
+    last_purchase_channel: Joi.string(),
+});

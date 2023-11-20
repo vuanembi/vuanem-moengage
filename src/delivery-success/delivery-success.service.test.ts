@@ -1,7 +1,7 @@
-import { getUserAttributesStream } from './user-attribute.service';
+import { getDeliverySuccessStream } from './delivery-success.service';
 
-it('getUserAttributes', (done) => {
-    const stream = getUserAttributesStream();
+it('getDeliverySuccess', (done) => {
+    const stream = getDeliverySuccessStream();
     stream.on('data', (data) => {
         expect(data).toBeDefined();
     });

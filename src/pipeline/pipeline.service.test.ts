@@ -1,7 +1,7 @@
-import { syncUserAttributes } from './pipeline.service';
+import { sync } from './pipeline.service';
 
-it('syncUserAttributes', async () => {
-    return syncUserAttributes()
+it('sync', async () => {
+    return sync()
         .then((result) => expect(result).toBeDefined())
         .catch((error) => {
             console.error(error);

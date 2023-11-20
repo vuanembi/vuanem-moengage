@@ -1,4 +1,7 @@
+import { Transform } from 'node:stream';
+
 import { createQueryStream, qb } from '../bigquery.service';
+import { UserAttributesSchema } from './user-attribute.dto';
 
 export const getUserAttributesStream = () => {
     const sql = qb
@@ -29,5 +32,14 @@ export const getUserAttributesStream = () => {
             'last_purchase_channel',
         ]);
 
-    return createQueryStream(sql.toQuery());
+    return createQueryStream(sql.toQuery()).pipe(
+        new Transform({
+            objectMode: true,
+            transform: (row, _, callback) => {
+                UserAttributesSchema.validateAsync(row)
+                    .then((value) => callback(null, { type: 'customer', customer_id: value.u_mb, attributes: value }))
+                    .catch((error) => callback(error));
+            },
+        }),
+    );
 };
