@@ -1,20 +1,8 @@
-import { Transform } from 'node:stream';
-
 import { getDeliverySuccessStream } from './delivery-success.service';
-import { DeliverySuccessEventSchema } from './delivery-success.dto';
 
 it('getDeliverySuccess', (done) => {
-    const transform = new Transform({
-        objectMode: true,
-        transform: (row, _, callback) => {
-            DeliverySuccessEventSchema.validateAsync(row)
-                .then((value) => callback(null, value))
-                .catch((error) => {
-                    callback(error);
-                });
-        },
-    });
-    const stream = getDeliverySuccessStream().pipe(transform);
+    const [extract, parse] = getDeliverySuccessStream();
+    const stream = extract.pipe(parse);
     stream.on('data', (data) => {
         expect(data).toBeDefined();
     });

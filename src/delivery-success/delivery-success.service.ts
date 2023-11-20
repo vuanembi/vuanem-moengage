@@ -1,4 +1,7 @@
+import { Transform } from 'node:stream';
+
 import { createQueryStream, qb } from '../bigquery.service';
+import { DeliverySuccessEventSchema } from './delivery-success.dto';
 
 export const getDeliverySuccessStream = () => {
     const sql = qb
@@ -9,5 +12,23 @@ export const getDeliverySuccessStream = () => {
             `extract(date from date_delivery_success at time zone "Asia/Ho_Chi_Minh") = date_add(CURRENT_DATE("Asia/Ho_Chi_Minh"), interval -1 day)`,
         );
 
-    return createQueryStream(sql.toQuery());
+    return [
+        createQueryStream(sql.toQuery()),
+        new Transform({
+            objectMode: true,
+            transform: (row, _, callback) => {
+                DeliverySuccessEventSchema.validateAsync(row)
+                    .then((value) =>
+                        callback(null, {
+                            type: 'event',
+                            customer_id: value.u_mb,
+                            action: 'DeliverySuccess - nonWebsite',
+                            current_time: value.date_delivery_success,
+                            attributes: value,
+                        }),
+                    )
+                    .catch((error) => callback(error));
+            },
+        }),
+    ] as const;
 };
