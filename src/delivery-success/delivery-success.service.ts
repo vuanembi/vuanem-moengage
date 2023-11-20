@@ -12,8 +12,7 @@ export const getDeliverySuccessStream = () => {
             `extract(date from date_delivery_success at time zone "Asia/Ho_Chi_Minh") = date_add(CURRENT_DATE("Asia/Ho_Chi_Minh"), interval -1 day)`,
         );
 
-    return [
-        createQueryStream(sql.toQuery()),
+    return createQueryStream(sql.toQuery()).pipe(
         new Transform({
             objectMode: true,
             transform: (row, _, callback) => {
@@ -30,5 +29,5 @@ export const getDeliverySuccessStream = () => {
                     .catch((error) => callback(error));
             },
         }),
-    ] as const;
+    );
 };

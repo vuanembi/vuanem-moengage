@@ -1,8 +1,7 @@
 import { getDeliverySuccessStream } from './delivery-success.service';
 
 it('getDeliverySuccess', (done) => {
-    const [extract, parse] = getDeliverySuccessStream();
-    const stream = extract.pipe(parse);
+    const stream = getDeliverySuccessStream();
     stream.on('data', (data) => {
         expect(data).toBeDefined();
     });

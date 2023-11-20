@@ -3,7 +3,7 @@ import { Transform } from 'node:stream';
 import { createQueryStream, qb } from '../bigquery.service';
 import { UserAttributesSchema } from './user-attribute.dto';
 
-export const getUserAttributesStreams = () => {
+export const getUserAttributesStream = () => {
     const sql = qb
         .withSchema('OP_CDP')
         .from('Moengage__UserAttribute')
@@ -32,8 +32,7 @@ export const getUserAttributesStreams = () => {
             'last_purchase_channel',
         ]);
 
-    return [
-        createQueryStream(sql.toQuery()),
+    return createQueryStream(sql.toQuery()).pipe(
         new Transform({
             objectMode: true,
             transform: (row, _, callback) => {
@@ -42,5 +41,5 @@ export const getUserAttributesStreams = () => {
                     .catch((error) => callback(error));
             },
         }),
-    ] as const;
+    );
 };
