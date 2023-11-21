@@ -21,9 +21,13 @@ export const getDeliverySuccessStream = () => {
                         callback(null, {
                             type: 'event',
                             customer_id: value.u_mb,
-                            action: 'DeliverySuccess - nonWebsite',
-                            current_time: value.date_delivery_success,
-                            attributes: value,
+                            actions: [
+                                {
+                                    action: 'DeliverySuccess - nonWebsite',
+                                    current_time: value.date_delivery_success,
+                                    attributes: value,
+                                },
+                            ],
                         }),
                     )
                     .catch((error) => callback(error));
