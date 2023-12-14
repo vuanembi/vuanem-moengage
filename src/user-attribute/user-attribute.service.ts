@@ -2,6 +2,8 @@ import { Transform } from 'node:stream';
 
 import { createQueryStream, qb } from '../bigquery.service';
 import { UserAttributesSchema } from './user-attribute.dto';
+import { log } from 'winston';
+import { logger } from '../logging.service';
 
 export const getUserAttributesStream = () => {
     const sql = qb
@@ -32,7 +34,8 @@ export const getUserAttributesStream = () => {
             'last_purchase_channel',
         ]);
 
-    return createQueryStream(sql.toQuery()).pipe(
+    return createQueryStream(
+        sql.toQuery(),
         new Transform({
             objectMode: true,
             transform: (row, _, callback) => {

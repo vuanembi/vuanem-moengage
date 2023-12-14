@@ -25,7 +25,8 @@ export const getPurchaseStream = () => {
         ])
         .whereRaw(`trandate = date_add(CURRENT_DATE("Asia/Ho_Chi_Minh"), interval -1 day)`);
 
-    return createQueryStream(sql.toQuery()).pipe(
+    return createQueryStream(
+        sql.toQuery(),
         new Transform({
             objectMode: true,
             transform: (row, _, callback) => {
