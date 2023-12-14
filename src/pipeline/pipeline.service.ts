@@ -8,6 +8,7 @@ import { logger } from '../logging.service';
 import { getUserAttributesStream } from '../user-attribute/user-attribute.service';
 import { getDeliverySuccessStream } from '../delivery-success/delivery-success.service';
 import { getPurchaseStream } from '../purchase/purchase.service';
+import { getTicketUpdatedStream } from '../ticket-updated/ticket-updated.service';
 import { bulkImport } from '../moengage/moengage.service';
 
 export const sync = async () => {
@@ -24,7 +25,12 @@ export const sync = async () => {
     });
 
     return await pipeline(
-        mergeStream(getUserAttributesStream(), getDeliverySuccessStream(), getPurchaseStream()),
+        mergeStream(
+            getUserAttributesStream(),
+            getDeliverySuccessStream(),
+            getPurchaseStream(),
+            getTicketUpdatedStream(),
+        ),
         new BatchStream({ size: 200 }),
         importStream,
         new Writable({ objectMode: true, write: (_, __, callback) => callback() }),

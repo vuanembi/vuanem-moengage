@@ -6,7 +6,7 @@ import { TicketUpdatedEventSchema } from './ticket-updated.dto';
 export const getTicketUpdatedStream = () => {
     const sql = qb
         .withSchema('OP_CDP')
-        .from('Moengage_TicketStagea')
+        .from('Moengage_TicketStage')
         .select(['u_mb', 'ticket_id', 'created_at', 'updated_at', 'stage', 'ttcs', 'nhu_cau'])
         .whereRaw(`extract(date from updated_at) = date_add(CURRENT_DATE(), interval -1 day)`);
 
