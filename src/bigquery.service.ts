@@ -8,7 +8,7 @@ const client = new BigQuery();
 export const qb = knex({ client: 'mysql' });
 
 export const createQueryStream = (query: string, transformStream: Transform) => {
-    const queryStream = client.createQueryStream({ query, wrapIntegers: false, jobTimeoutMs: 300_000 });
+    const queryStream = client.createQueryStream({ query, wrapIntegers: false, jobTimeoutMs: 60_000 });
     const stream = queryStream.pipe(transformStream);
 
     queryStream.on('error', (error) => {
