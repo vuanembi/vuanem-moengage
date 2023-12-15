@@ -12,6 +12,7 @@ export const getUserAttributesStream = () => {
         .select([
             'u_mb',
             'u_n',
+            'u_id',
             'u_em',
             'is_customer',
             'loyalty_point',
