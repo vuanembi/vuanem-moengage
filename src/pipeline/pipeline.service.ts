@@ -6,6 +6,7 @@ import mergeStream from 'merge-stream';
 
 import { logger } from '../logging.service';
 import { getUserAttributesStream } from '../user-attribute/user-attribute.service';
+import { getCustomerRatingStream } from '../customer-rating/customer-rating.service';
 import { getDeliverySuccessStream } from '../delivery-success/delivery-success.service';
 import { getPurchaseStream } from '../purchase/purchase.service';
 import { getTicketUpdatedStream } from '../ticket-updated/ticket-updated.service';
@@ -30,6 +31,7 @@ export const sync = async () => {
             getDeliverySuccessStream(),
             getPurchaseStream(),
             getTicketUpdatedStream(),
+            getCustomerRatingStream(),
         ),
         new BatchStream({ size: 200 }),
         importStream,
