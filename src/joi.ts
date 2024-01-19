@@ -13,14 +13,6 @@ export const number = Joi.custom((value) => {
     return Number(value);
 });
 
-export const date = Joi.custom((value) => {
-    if (value instanceof BigQueryTimestamp || value instanceof BigQueryDate || value instanceof BigQueryDate) {
-        return dayjs(value.value).format('YYYY-MM-DD');
-    }
-
-    return null;
-});
-
 export const timestamp = Joi.custom((value) => {
     if (value instanceof BigQueryTimestamp || value instanceof BigQueryDate || value instanceof BigQueryDate) {
         return dayjs(value.value).toISOString();

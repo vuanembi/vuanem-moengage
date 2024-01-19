@@ -1,8 +1,8 @@
-import { Joi, date, number } from '../joi';
+import { Joi, timestamp, number } from '../joi';
 
 export const PurchaseSchema = Joi.object({
     u_mb: Joi.string(),
-    trandate: date,
+    trandate: timestamp,
     channel: Joi.string(),
     tranid: Joi.string(),
     ns_item_code: number,
