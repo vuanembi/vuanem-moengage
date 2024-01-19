@@ -33,7 +33,7 @@ export const sync = async () => {
             getTicketUpdatedStream(),
             getCustomerRatingStream(),
         ),
-        new BatchStream({ size: 200 }),
+        new BatchStream({ size: 100 }),
         importStream,
         new Writable({ objectMode: true, write: (_, __, callback) => callback() }),
     ).then(() => true);
