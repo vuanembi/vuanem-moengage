@@ -12,6 +12,7 @@ export const getTicketUpdatedStream = () => {
             'ticket_id',
             qb.raw('timestamp_sub(created_at, interval 7 hour) as created_at'),
             qb.raw('timestamp_sub(updated_at, interval 7 hour) as updated_at'),
+            'ticket_type',
             'stage',
             'ttcs',
             'nhu_cau',

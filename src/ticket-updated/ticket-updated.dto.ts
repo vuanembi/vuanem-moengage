@@ -5,6 +5,7 @@ export const TicketUpdatedEventSchema = Joi.object({
     ticket_id: number,
     created_at: timestamp,
     updated_at: timestamp,
+    ticket_type: Joi.string(),
     stage: Joi.string(),
     ttcs: Joi.string(),
     nhu_cau: Joi.string(),
