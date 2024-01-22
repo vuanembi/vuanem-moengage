@@ -13,6 +13,7 @@ export const getUserAttributesStream = () => {
             'u_mb',
             'u_n',
             'u_id',
+            'user_name',
             'u_em',
             'is_customer',
             'loyalty_point',

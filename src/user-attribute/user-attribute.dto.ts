@@ -4,6 +4,7 @@ export const UserAttributesSchema = Joi.object({
     u_mb: Joi.string(),
     u_n: Joi.string(),
     u_id: Joi.string(),
+    user_name: Joi.string(),
     u_em: Joi.string(),
     is_customer: Joi.boolean(),
     loyalty_point: number,
