@@ -1,0 +1,62 @@
+import { Joi, timestamp, number } from '../../joi';
+import { qb } from '../../bigquery.service';
+import { createUserStream } from '../pipeline.utils';
+
+export const getUserAttributesStream = createUserStream({
+    qb: qb
+        .withSchema('OP_CDP')
+        .from('Moengage__UserAttribute')
+        .select([
+            'u_mb',
+            'u_n',
+            'u_id',
+            'user_name',
+            'u_em',
+            'is_customer',
+            'loyalty_point',
+            'loyalty_group',
+            'expire_date_group',
+            'dob',
+            'redeem_amount',
+            'last_trandate',
+            't_rev',
+            'frequency',
+            'last_rating_point',
+            'last_rating_date',
+            'moe_ip_city',
+            'last_location_code',
+            'first_medium',
+            'moe_cr_from',
+            'first_campaign_name',
+            'last_engagement_date',
+            'last_engagement_place',
+            'last_purchase_channel',
+        ]),
+    schema: Joi.object({
+        u_mb: Joi.string(),
+        u_n: Joi.string(),
+        u_id: Joi.string(),
+        user_name: Joi.string(),
+        u_em: Joi.string(),
+        is_customer: Joi.boolean(),
+        loyalty_point: number,
+        loyalty_group: Joi.string(),
+        expire_date_group: timestamp,
+        dob: timestamp,
+        redeem_amount: number,
+        last_trandate: timestamp,
+        t_rev: number,
+        frequency: number,
+        last_rating_point: number,
+        last_rating_date: timestamp,
+        moe_ip_city: Joi.string(),
+        last_location_code: Joi.string(),
+        first_medium: Joi.string(),
+        moe_cr_from: Joi.string(),
+        first_campaign_name: Joi.string(),
+        last_engagement_date: timestamp,
+        last_engagement_place: Joi.string(),
+        last_purchase_channel: Joi.string(),
+    }),
+    customerId: (row) => row.u_mb,
+});

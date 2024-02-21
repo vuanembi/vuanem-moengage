@@ -1,30 +1,19 @@
-import { Writable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import BatchStream from 'batch-stream';
-import parallelTransform from 'parallel-transform';
 import mergeStream from 'merge-stream';
+import PQueue from 'p-queue';
 
-import { logger } from '../logging.service';
-import { getUserAttributesStream } from '../user-attribute/user-attribute.service';
-import { getCustomerRatingStream } from '../customer-rating/customer-rating.service';
-import { getDeliverySuccessStream } from '../delivery-success/delivery-success.service';
-import { getPurchaseStream } from '../purchase/purchase.service';
-import { getTicketUpdatedStream } from '../ticket-updated/ticket-updated.service';
+import { getLogger } from '../logging.service';
+import { getUserAttributesStream } from './streams/user-attribute.service';
+import { getCustomerRatingStream } from './streams/customer-rating.service';
+import { getDeliverySuccessStream } from './streams/delivery-success.service';
+import { getPurchaseStream } from './streams/purchase.service';
+import { getTicketUpdatedStream } from './streams/ticket-updated.service';
 import { bulkImport } from '../moengage/moengage.service';
 
+const logger = getLogger(__filename);
+
 export const sync = async () => {
-    let count = 0;
-
-    const importStream = parallelTransform(50, { ordered: false }, (elements, callback) => {
-        bulkImport(elements)
-            .then(() => {
-                count = count + elements.length;
-                logger.info({ fn: 'sync', count });
-                callback();
-            })
-            .catch((error) => callback(error));
-    });
-
     return await pipeline(
         mergeStream(
             getUserAttributesStream(),
@@ -34,7 +23,20 @@ export const sync = async () => {
             getCustomerRatingStream(),
         ),
         new BatchStream({ size: 100 }),
-        importStream,
-        new Writable({ objectMode: true, write: (_, __, callback) => callback() }),
+        async function (rows) {
+            let total = 0;
+            let done = 0;
+            const queue = new PQueue();
+            for await (const row of rows) {
+                total = total + row.length;
+                const import_ = async () => {
+                    await bulkImport(row);
+                    done = done + row.length;
+                    logger.debug(`Import ${done}/${total}`);
+                };
+                queue.add(import_);
+            }
+            await queue.onIdle();
+        },
     ).then(() => true);
 };
