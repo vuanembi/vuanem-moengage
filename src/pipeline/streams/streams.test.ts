@@ -1,24 +1,20 @@
-import { Transform } from 'node:stream';
-
-import { getLogger } from '../../logging.service';
 import { getUserAttributesStream } from './user-attribute.service';
 import { getCustomerRatingStream } from './customer-rating.service';
 import { getDeliverySuccessStream } from './delivery-success.service';
 import { getPurchaseStream } from './purchase.service';
 import { getTicketUpdatedStream } from './ticket-updated.service';
 
-const logger = getLogger(__filename);
-
 describe('streams', () => {
-    const test = (stream: Transform, done: jest.DoneCallback) => {
-        stream.on('data', (data) => {
+    const test = (stream: NodeJS.ReadWriteStream, done: jest.DoneCallback) => {
+        stream.once('data', (data) => {
+            stream.end();
             expect(data).toBeDefined();
+            done();
         });
-        stream.on('error', (error) => {
-            logger.error({ error });
+        stream.once('error', (error) => {
+            stream.end();
             done(error);
         });
-        stream.on('finish', () => done());
     };
 
     it('getUserAttributesStream', (done) => {
