@@ -1,6 +1,6 @@
-import { Joi, timestamp } from '../joi';
-import { qb } from '../bigquery.service';
-import { createEventStream } from '../pipeline/pipeline.utils';
+import { Joi, timestamp } from '../../joi';
+import { qb } from '../../bigquery.service';
+import { createEventStream } from '../pipeline.utils';
 
 export const getDeliverySuccessStream = createEventStream({
     qb: qb

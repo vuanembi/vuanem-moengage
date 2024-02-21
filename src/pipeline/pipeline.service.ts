@@ -5,11 +5,11 @@ import mergeStream from 'merge-stream';
 import PQueue from 'p-queue';
 
 import { logger } from '../logging.service';
-import { getUserAttributesStream } from '../user-attribute/user-attribute.service';
-import { getCustomerRatingStream } from '../customer-rating/customer-rating.service';
-import { getDeliverySuccessStream } from '../delivery-success/delivery-success.service';
-import { getPurchaseStream } from '../purchase/purchase.service';
-import { getTicketUpdatedStream } from '../ticket-updated/ticket-updated.service';
+import { getUserAttributesStream } from './streams/user-attribute.service';
+import { getCustomerRatingStream } from './streams/customer-rating.service';
+import { getDeliverySuccessStream } from './streams/delivery-success.service';
+import { getPurchaseStream } from './streams/purchase.service';
+import { getTicketUpdatedStream } from './streams/ticket-updated.service';
 import { bulkImport } from '../moengage/moengage.service';
 
 export const sync = async () => {

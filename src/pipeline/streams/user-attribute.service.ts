@@ -1,6 +1,6 @@
-import { Joi, timestamp, number } from '../joi';
-import { qb } from '../bigquery.service';
-import { createUserStream } from '../pipeline/pipeline.utils';
+import { Joi, timestamp, number } from '../../joi';
+import { qb } from '../../bigquery.service';
+import { createUserStream } from '../pipeline.utils';
 
 export const getUserAttributesStream = createUserStream({
     qb: qb

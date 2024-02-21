@@ -1,6 +1,6 @@
-import { Joi, number, timestamp } from '../joi';
-import { qb } from '../bigquery.service';
-import { createEventStream } from '../pipeline/pipeline.utils';
+import { Joi, number, timestamp } from '../../joi';
+import { qb } from '../../bigquery.service';
+import { createEventStream } from '../pipeline.utils';
 
 export const TicketUpdatedEventSchema = Joi.object({
     u_mb: Joi.string(),
