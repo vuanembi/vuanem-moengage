@@ -1,6 +1,7 @@
 import { Transform } from 'node:stream';
 import { Knex } from 'knex';
 import Joi from 'joi';
+import pipe from 'multipipe';
 
 import { getLogger } from '../logging.service';
 import { createQueryStream } from '../bigquery.service';
@@ -25,12 +26,7 @@ export const createDataStream = <T extends CreateDataStreamOptions>(builder: (co
                 },
             });
 
-            const stream = read.pipe(validationTransform).pipe(builder(config));
-            read.on('error', (error) => {
-                logger.error('Error reading data', { error });
-                stream.emit('error');
-            });
-            return stream;
+            return pipe(read, validationTransform, builder(config));
         };
     };
 };
