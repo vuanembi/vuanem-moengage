@@ -1,12 +1,9 @@
-import { Transform } from 'node:stream';
+import { Joi, timestamp, number } from '../joi';
+import { qb } from '../bigquery.service';
+import { createUserStream } from '../pipeline/pipeline.utils';
 
-import { createQueryStream, qb } from '../bigquery.service';
-import { UserAttributesSchema } from './user-attribute.dto';
-import { log } from 'winston';
-import { logger } from '../logging.service';
-
-export const getUserAttributesStream = () => {
-    const sql = qb
+export const getUserAttributesStream = createUserStream({
+    qb: qb
         .withSchema('OP_CDP')
         .from('Moengage__UserAttribute')
         .select([
@@ -34,17 +31,32 @@ export const getUserAttributesStream = () => {
             'last_engagement_date',
             'last_engagement_place',
             'last_purchase_channel',
-        ]);
-
-    return createQueryStream(
-        sql.toQuery(),
-        new Transform({
-            objectMode: true,
-            transform: (row, _, callback) => {
-                UserAttributesSchema.validateAsync(row)
-                    .then((value) => callback(null, { type: 'customer', customer_id: value.u_mb, attributes: value }))
-                    .catch((error) => callback(error));
-            },
-        }),
-    );
-};
+        ]),
+    schema: Joi.object({
+        u_mb: Joi.string(),
+        u_n: Joi.string(),
+        u_id: Joi.string(),
+        user_name: Joi.string(),
+        u_em: Joi.string(),
+        is_customer: Joi.boolean(),
+        loyalty_point: number,
+        loyalty_group: Joi.string(),
+        expire_date_group: timestamp,
+        dob: timestamp,
+        redeem_amount: number,
+        last_trandate: timestamp,
+        t_rev: number,
+        frequency: number,
+        last_rating_point: number,
+        last_rating_date: timestamp,
+        moe_ip_city: Joi.string(),
+        last_location_code: Joi.string(),
+        first_medium: Joi.string(),
+        moe_cr_from: Joi.string(),
+        first_campaign_name: Joi.string(),
+        last_engagement_date: timestamp,
+        last_engagement_place: Joi.string(),
+        last_purchase_channel: Joi.string(),
+    }),
+    customerId: (row) => row.u_mb,
+});

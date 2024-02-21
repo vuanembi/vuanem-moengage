@@ -1,6 +1,6 @@
 import { getTicketUpdatedStream } from './ticket-updated.service';
 
-it('getTicketUpdated', (done) => {
+it('getTicketUpdatedStream', (done) => {
     const stream = getTicketUpdatedStream();
     stream.on('data', (data) => {
         expect(data).toBeDefined();

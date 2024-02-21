@@ -1,10 +1,9 @@
-import { Transform } from 'node:stream';
+import { Joi, timestamp, number } from '../joi';
+import { qb } from '../bigquery.service';
+import { createEventStream } from '../pipeline/pipeline.utils';
 
-import { createQueryStream, qb } from '../bigquery.service';
-import { PurchaseSchema } from './purchase.dto';
-
-export const getPurchaseStream = () => {
-    const sql = qb
+export const getPurchaseStream = createEventStream({
+    qb: qb
         .withSchema('OP_CDP')
         .from('Moengage_Purchase_nonWebsite')
         .select([
@@ -25,29 +24,23 @@ export const getPurchaseStream = () => {
         ])
         .whereRaw(
             `extract(date from trandate at time zone "Asia/Ho_Chi_Minh") = date_add(CURRENT_TIMESTAMP("Asia/Ho_Chi_Minh"), interval -1 day)`,
-        );
-
-    return createQueryStream(
-        sql.toQuery(),
-        new Transform({
-            objectMode: true,
-            transform: (row, _, callback) => {
-                PurchaseSchema.validateAsync(row)
-                    .then((value) =>
-                        callback(null, {
-                            type: 'event',
-                            customer_id: value.u_mb,
-                            actions: [
-                                {
-                                    action: 'Purchase_nonWebsite',
-                                    current_time: value.trandate,
-                                    attributes: value,
-                                },
-                            ],
-                        }),
-                    )
-                    .catch((error) => callback(error));
-            },
-        }),
-    );
-};
+        ),
+    schema: Joi.object({
+        u_mb: Joi.string(),
+        trandate: timestamp,
+        channel: Joi.string(),
+        tranid: Joi.string(),
+        ns_item_code: number,
+        ns_item_name: Joi.string(),
+        class_code: Joi.string(),
+        class_name: Joi.string(),
+        category_name: Joi.string(),
+        store_code: Joi.string(),
+        city_code: Joi.string(),
+        item_qty: number,
+        item_amt: number,
+        total_order_value: number,
+    }),
+    customerId: (row) => row.u_mb,
+    actionsMeta: (row) => ({ action: 'Purchase_nonWebsite', current_time: row.trandate }),
+});

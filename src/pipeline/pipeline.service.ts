@@ -27,10 +27,10 @@ export const sync = async () => {
 
     return await pipeline(
         mergeStream(
-            getUserAttributesStream(),
-            getDeliverySuccessStream(),
-            getPurchaseStream(),
-            getTicketUpdatedStream(),
+            // getUserAttributesStream(),
+            // getDeliverySuccessStream(),
+            // getPurchaseStream(),
+            // getTicketUpdatedStream(),
             getCustomerRatingStream(),
         ),
         new BatchStream({ size: 100 }),

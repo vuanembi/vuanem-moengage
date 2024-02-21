@@ -1,6 +1,6 @@
 import { getUserAttributesStream } from './user-attribute.service';
 
-it('getUserAttributes', (done) => {
+it('getUserAttributesStream', (done) => {
     const stream = getUserAttributesStream();
     stream.on('data', (data) => {
         expect(data).toBeDefined();

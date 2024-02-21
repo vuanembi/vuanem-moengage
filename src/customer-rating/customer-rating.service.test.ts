@@ -1,6 +1,6 @@
 import { getCustomerRatingStream } from './customer-rating.service';
 
-it('getCustomerRating', (done) => {
+it('getCustomerRatingStream', (done) => {
     const stream = getCustomerRatingStream();
     stream.on('data', (data) => {
         expect(data).toBeDefined();

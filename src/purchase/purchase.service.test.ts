@@ -1,6 +1,6 @@
 import { getPurchaseStream } from './purchase.service';
 
-it('getPurchase', (done) => {
+it('getPurchaseStream', (done) => {
     const stream = getPurchaseStream();
     stream.on('data', (data) => {
         expect(data).toBeDefined();
