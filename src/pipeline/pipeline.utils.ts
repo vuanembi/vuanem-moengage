@@ -2,9 +2,11 @@ import { Transform } from 'node:stream';
 import { Knex } from 'knex';
 import Joi from 'joi';
 
-import { logger } from '../logging.service';
+import { getLogger } from '../logging.service';
 import { createQueryStream } from '../bigquery.service';
 import { UserElement, EventElement } from '../moengage/moengage.service';
+
+const logger = getLogger(__filename);
 
 type CreateDataStreamOptions = {
     qb: Knex.QueryBuilder;
@@ -25,7 +27,7 @@ export const createDataStream = <T extends CreateDataStreamOptions>(builder: (co
 
             const stream = read.pipe(validationTransform).pipe(builder(config));
             read.on('error', (error) => {
-                logger.error({ error });
+                logger.error('Error reading data', { error });
                 stream.emit('error');
             });
             return stream;

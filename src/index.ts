@@ -1,23 +1,27 @@
-import { logger } from './logging.service';
-
+import { getLogger } from './logging.service';
 import { sync } from './pipeline/pipeline.service';
 
-process.on('uncaughtException', () => {
-    logger.error({ action: 'uncaught-exception' });
+const logger = getLogger(__filename);
+
+process.on('uncaughtException', (error) => {
+    logger.error('Uncaught Exception', error);
     process.exit(1);
 });
 
 process.on('SIGINT', () => {
-    logger.info({ action: 'interupt' });
+    logger.info('Interrupted');
     process.exit(0);
 });
 
 (async () => {
-    logger.info({ fn: 'index', details: 'start' });
+    logger.info('Starting sync');
     await sync()
-        .then(() => logger.info({ fn: 'index', details: 'success' }))
+        .then(() => {
+            logger.info('Done');
+            process.exit(0);
+        })
         .catch((error) => {
-            console.log(error);
-            logger.error({ fn: 'index', error });
+            logger.error('Error', { error });
+            process.exit(1);
         });
 })();

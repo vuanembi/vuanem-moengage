@@ -28,6 +28,7 @@
         "merge-stream": "^2.0.0",
         "p-queue": "^6.6.2",
         "parallel-transform": "^1.2.0",
+        "safe-stable-stringify": "^2.4.3",
         "winston": "^3.11.0"
     },
     "jest": {

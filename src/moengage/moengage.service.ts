@@ -1,7 +1,9 @@
 import axios, { AxiosError } from 'axios';
 import axiosRetry from 'axios-retry';
 
-import { logger } from '../logging.service';
+import { getLogger } from '../logging.service';
+
+const logger = getLogger(__filename);
 
 const APP_ID = 'IS1NBURFC2MYWW6ATDN7F3LN';
 const API_ID = 'IS1NBURFC2MYWW6ATDN7F3LN';
@@ -17,8 +19,9 @@ const moengageClient = axios.create({
 moengageClient.interceptors.response.use((response) => {
     const data = <APIResponseSucesss | APIResponseFailure>response.data;
     if (data.status === 'fail') {
-        logger.error({ fn: 'moengage-api', data });
-        throw new AxiosError(data.error.message, 'moengage-error', response.config, response.request, response);
+        const error = new AxiosError(data.error.message, 'Moengage', response.config, response.request, response);
+        logger.error('Error requesting Moengage', { error });
+        throw error;
     }
     return response;
 });
