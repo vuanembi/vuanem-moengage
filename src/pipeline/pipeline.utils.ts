@@ -4,7 +4,7 @@ import Joi from 'joi';
 
 import { logger } from '../logging.service';
 import { createQueryStream } from '../bigquery.service';
-import { CustomerElement, EventElement } from '../moengage/moengage.type';
+import { UserElement, EventElement } from '../moengage/moengage.service';
 
 type CreateDataStreamOptions = {
     qb: Knex.QueryBuilder;
@@ -45,7 +45,7 @@ export const createUserStream = createDataStream<CreateUserStreamConfig>(({ cust
                 type: 'customer',
                 customer_id: customerId(row),
                 attributes: row,
-            } as CustomerElement);
+            } as UserElement);
         },
     });
 });

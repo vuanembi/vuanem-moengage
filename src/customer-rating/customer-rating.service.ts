@@ -7,7 +7,7 @@ export const getCustomerRatingStream = createEventStream({
         .withSchema('OP_CDP')
         .from('Moengage_CustomersRating')
         .select(['u_mb', 'u_n', 'u_id', 'create_date', 'rating_giaohang', 'rating_SO'])
-        .whereRaw(`create_date = date_add(CURRENT_DATE(), interval -1 day)`),
+        .whereRaw(`create_date = date_add(current_date("Asia/Ho_Chi_Minh"), interval -1 day)`),
     schema: Joi.object({
         u_mb: Joi.string(),
         u_n: Joi.string(),

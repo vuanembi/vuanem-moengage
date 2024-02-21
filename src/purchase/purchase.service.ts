@@ -23,7 +23,7 @@ export const getPurchaseStream = createEventStream({
             'total_order_value',
         ])
         .whereRaw(
-            `extract(date from trandate at time zone "Asia/Ho_Chi_Minh") = date_add(CURRENT_TIMESTAMP("Asia/Ho_Chi_Minh"), interval -1 day)`,
+            `extract(date from trandate at time zone "Asia/Ho_Chi_Minh") = date_add(current_date("Asia/Ho_Chi_Minh"), interval -1 day)`,
         ),
     schema: Joi.object({
         u_mb: Joi.string(),

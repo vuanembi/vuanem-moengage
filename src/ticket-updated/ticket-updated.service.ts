@@ -27,7 +27,9 @@ export const getTicketUpdatedStream = createEventStream({
             'ttcs',
             'nhu_cau',
         ])
-        .whereRaw(`extract(date from updated_at) = date_add(CURRENT_DATE(), interval -1 day)`),
+        .whereRaw(
+            `extract(date from updated_at at time zone "Asia/Ho_Chi_Minh") = date_add(current_date("Asia/Ho_Chi_Minh"), interval -1 day)`,
+        ),
     schema: Joi.object({
         u_mb: Joi.string(),
         ticket_id: number,

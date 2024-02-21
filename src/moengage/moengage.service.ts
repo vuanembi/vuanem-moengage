@@ -2,8 +2,9 @@ import axios, { AxiosError } from 'axios';
 import axiosRetry from 'axios-retry';
 
 import { logger } from '../logging.service';
-import { CustomerElement, EventElement } from './moengage.type';
-import { APP_ID, API_ID } from './moengage.const';
+
+const APP_ID = 'IS1NBURFC2MYWW6ATDN7F3LN';
+const API_ID = 'IS1NBURFC2MYWW6ATDN7F3LN';
 
 type APIResponseSucesss = { status: 'success' };
 type APIResponseFailure = { status: 'fail'; error: { type: string; message: string } };
@@ -28,7 +29,19 @@ axiosRetry(moengageClient, {
     retryCondition: (error) => error.response?.status === 502,
 });
 
-export const bulkImport = async (elements: (CustomerElement | EventElement)[]) => {
+export type UserElement = {
+    type: 'customer';
+    customer_id: string;
+    attributes: object;
+};
+
+export type EventElement = {
+    type: 'event';
+    customer_id: string;
+    actions: object[];
+};
+
+export const bulkImport = async (elements: (UserElement | EventElement)[]) => {
     return await moengageClient
         .request<APIResponseSucesss>({
             method: 'POST',
