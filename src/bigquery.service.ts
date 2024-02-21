@@ -13,7 +13,7 @@ export const createQueryStream = (query: string, transformStream: Transform) => 
 
     queryStream.on('error', (error) => {
         logger.error({ error });
-        stream.end();
+        stream.emit('error', error);
     });
 
     return stream;
