@@ -3,11 +3,8 @@ import { Knex } from 'knex';
 import Joi from 'joi';
 import pipe from 'multipipe';
 
-import { getLogger } from '../logging.service';
 import { createQueryStream } from '../bigquery.service';
 import { UserElement, EventElement } from '../moengage/moengage.service';
-
-const logger = getLogger(__filename);
 
 type CreateDataStreamOptions = {
     qb: Knex.QueryBuilder;
