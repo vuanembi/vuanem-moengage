@@ -23,7 +23,9 @@ export const getPurchaseStream = () => {
             'item_amt',
             'total_order_value',
         ])
-        .whereRaw(`trandate = date_add(CURRENT_DATE("Asia/Ho_Chi_Minh"), interval -1 day)`);
+        .whereRaw(
+            `extract(date from trandate at time zone "Asia/Ho_Chi_Minh") = date_add(CURRENT_TIMESTAMP("Asia/Ho_Chi_Minh"), interval -1 day)`,
+        );
 
     return createQueryStream(
         sql.toQuery(),
