@@ -31,7 +31,7 @@ export const getUserAttributesStream = createUserStream({
             'last_engagement_date',
             'last_engagement_place',
             'last_purchase_channel',
-        ]).limit(10),
+        ]),
     schema: Joi.object({
         u_mb: Joi.string(),
         u_n: Joi.string(),
