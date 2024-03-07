@@ -29,3 +29,4 @@ jobs:
         with:
           install: true
           tags: ${{ env.IMAGE }}
+          push: true
